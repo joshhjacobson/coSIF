@@ -1,0 +1,29 @@
+name: geostat
+channels:
+  - conda-forge
+dependencies:
+  # Core python
+  - python=3.9
+  - black
+  - jupyterlab
+  - numpy
+  - numba
+  - pandas
+  - scipy
+  # Data management
+  - xarray
+  - rioxarray
+  - dask
+  - netcdf4
+  - h5netcdf
+  - h5py
+  - rasterio
+  - xesmf
+  # Statistics / ML
+  - scikit-learn
+  - statsmodels
+  # Plotting
+  - matplotlib=3.4
+  - seaborn
+  - cartopy
+  - cmcrameri

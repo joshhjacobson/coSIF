@@ -1,0 +1,44 @@
+# Project directories
+data
+figures
+
+# Misc file types
+*.DS_Store
+*.nc
+*.nc4
+*.csv
+*.pickle
+
+# Byte-compiled / optimized / DLL files
+__pycache__
+*.py[cod]
+*$py.class
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# Environments
+.conda_env
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Dask
+dask-worker-space
+
+# VS Code: see https://github.com/github/gitignore/blob/master/Global/VisualStudioCode.gitignore
+.vscode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace

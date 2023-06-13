@@ -22,7 +22,7 @@ logging.basicConfig(
 
 def get_prediction_locations() -> pd.DataFrame:
     """Produce prediction coordinates (land only) using MODIS LCC-derived binary land mask."""
-    with xr.open_dataset("../data/production/land_cover_north_america.nc4") as ds:
+    with xr.open_dataset("../data/intermediate/land_cover_north_america.nc4") as ds:
         df = ds["land_cover"].to_dataframe().reset_index()
         df = df.where(df["land_cover"] == 1).dropna()[["lat", "lon"]].reset_index(drop=True)
         logging.info(f"Number of prediction locations: {df.shape[0]}")
@@ -116,7 +116,7 @@ class Predictor:
         self,
         i: int,
         pcoords: pd.DataFrame,
-        df_measurement_error: pd.DataFrame,
+        df_me_variance: pd.DataFrame,
         ds_covariates: Optional[xr.Dataset] = None,
         num_local_values: Optional[int] = 150,
     ) -> Dict[str, Union[xr.Dataset, np.ndarray]]:
@@ -126,7 +126,8 @@ class Predictor:
         Parameters:
             i: index of the process in the MultiField to be predicted
             pcoords: validation prediction coordinates with columns [lat, lon]
-            df_measurement_error: dataframe of measurement errors at prediction locations
+            df_me_variance: dataframe of measurement error variances at
+                prediction locations
             ds_covariates: dataset of prediction covariates; coordinates in this dataset must
                 align  with those given in pcoords
             num_local_values: the number of data values to use in prediction at each location;
@@ -138,7 +139,7 @@ class Predictor:
         self._i = i
         self._validation = True
         self._pcoords = pcoords.copy()
-        self._df_measurement_error = df_measurement_error.copy()
+        self._df_me_variance = df_me_variance.copy()
         self._withhold_data_validation(pcoords)
         self._remove_measurement_error_from_nugget()
 
@@ -439,7 +440,7 @@ class Predictor:
 
         if self._validation:
             # include measurement error as a data variable
-            df = df.merge(self._df_measurement_error, how="left")
+            df = df.merge(self._df_me_variance, how="left")
 
         # combine the large-scale and small-scale terms to produce predictions
         ds_postprocessed = df.set_index(["lat", "lon"]).to_xarray()
@@ -452,10 +453,10 @@ class Predictor:
             trend_ms_variation = field.trend_ms_variation * field.scale_factor**2
             # add measurement error variance to process-scale prediction errors
             ds_postprocessed["trend_surface_rmspe"] = np.sqrt(
-                trend_ms_variation + ds_postprocessed["measurement_error"].fillna(0) ** 2
+                trend_ms_variation + ds_postprocessed["me_variance"].fillna(0)
             )
             ds_postprocessed["rmspe"] = np.sqrt(
-                da_scaled_uncertainty + ds_postprocessed["measurement_error"].fillna(0) ** 2
+                da_scaled_uncertainty + ds_postprocessed["me_variance"].fillna(0)
             )
         else:
             ds_postprocessed["rmspe"] = np.sqrt(da_scaled_uncertainty)
@@ -593,7 +594,7 @@ class Predictor:
         if a == b:
             # NOTE: measurement-error variance added here
             c_me = (
-                self._df_measurement_error["measurement_error"].iloc[a]
+                self._df_me_variance["me_variance"].iloc[a]
                 / (self.mf.fields[self._i].scale_factor) ** 2
             )
             c0 = self.model.covariance(self._i, 0, use_nugget=True)[0] + c_me

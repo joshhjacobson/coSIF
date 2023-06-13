@@ -40,8 +40,8 @@ show_basis_custom <- function(basis, g){
 
 
 ### Get gridded data for data locations
-df_data_sif <- read_csv("../data/production/OCO2_SIF_005deg.csv", col_select=c("lon", "lat", "sif"))
-df_data_xco2 <- read_csv("../data/production/OCO2_XCO2_005deg.csv", col_select=c("lon", "lat", "xco2"))
+df_data_sif <- read_csv("../data/intermediate/OCO2_SIF_005deg.csv", col_select=c("lon", "lat", "sif"))
+df_data_xco2 <- read_csv("../data/intermediate/OCO2_XCO2_005deg.csv", col_select=c("lon", "lat", "xco2"))
 
 data_sp_sif <- df_data_sif
 coordinates(data_sp_sif) <-  ~lon + lat
@@ -122,4 +122,4 @@ ggplot(sample_n(single_basis, 10000)) + geom_point(aes(x = lon, y = lat, col = z
 
 
 ### Save basis matrix to csv
-write_csv(df_basis, "../data/production/bisquares_basis.csv")
+write_csv(df_basis, "../data/intermediate/bisquares_basis.csv")

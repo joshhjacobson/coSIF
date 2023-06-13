@@ -26,8 +26,8 @@ Create the required directories:
 ```
 mkdir data figures
 cd data
-mkdir production raw
-cd production
+mkdir input intermediate output
+cd intermediate
 mkdir models validation
 cd models
 mkdir 202102 202104 202107 202110
@@ -37,18 +37,18 @@ mkdir 202102 202104 202107 202110
 
 ## Getting the data
 
-All input datasets go into the directory `data/raw`. These includes both observational and auxiliary datasets.
+All input datasets go into the directory `data/input`. These includes both observational and auxiliary datasets.
 
 ### Observational datasets: OCO-2 SIF and XCO2
 
 Both the SIF and XCO2 datasets are publicly available through NASA's Goddard Earth Sciences Data and Information Services Center (GES DISC).
 
-- The SIF Lite files (version 10r) are available [here](https://disc.gsfc.nasa.gov/datasets/OCO2_L2_Lite_SIF_10r/summary). The NetCDF files should be placed in the directory `data/raw/OCO2_L2_Lite_SIF.10r/`.
-- The XCO2 Lite files (version 10r) are available [here](https://disc.gsfc.nasa.gov/datasets/OCO2_L2_Lite_FP_10r/summary). The NetCDF files should be placed in the directory `data/raw/OCO2_L2_Lite_FP.10r/`.
+- The SIF Lite files (version 10r) are available [here](https://disc.gsfc.nasa.gov/datasets/OCO2_L2_Lite_SIF_10r/summary). The NetCDF files should be placed in the directory `data/input/OCO2_L2_Lite_SIF.10r/`.
+- The XCO2 Lite files (version 10r) are available [here](https://disc.gsfc.nasa.gov/datasets/OCO2_L2_Lite_FP_10r/summary). The NetCDF files should be placed in the directory `data/input/OCO2_L2_Lite_FP.10r/`.
 
 ### Auxiliary datasets: MODIS LCC
 
-The Terra and Aqua combined Moderate Resolution Imaging Spectroradiometer (MODIS) Land Cover Climate Modeling Grid (CMG) (MCD12C1) Version 6.1 data product is publicly available on NASA's [Earthdata platform](https://lpdaac.usgs.gov/products/mcd12c1v061/). The product is available from 2001, but note that only 2021 is needed. The HDF file should be placed in the directory `data/raw/MCD12C1v061`.
+The Terra and Aqua combined Moderate Resolution Imaging Spectroradiometer (MODIS) Land Cover Climate Modeling Grid (CMG) (MCD12C1) Version 6.1 data product is publicly available on NASA's [Earthdata platform](https://lpdaac.usgs.gov/products/mcd12c1v061/). The product is available from 2001, but note that only 2021 is needed. The HDF file should be placed in the directory `data/input/MCD12C1v061`.
 
 ## Running the framework
 

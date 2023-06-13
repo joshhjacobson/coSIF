@@ -43,8 +43,8 @@ All input datasets go into the directory `data/input`. These includes both obser
 
 Both the SIF and XCO2 datasets are publicly available through NASA's Goddard Earth Sciences Data and Information Services Center (GES DISC).
 
-- The SIF Lite files (version 10r) are available [here](https://disc.gsfc.nasa.gov/datasets/OCO2_L2_Lite_SIF_10r/summary). The NetCDF files should be placed in the directory `data/input/OCO2_L2_Lite_SIF.10r/`.
-- The XCO2 Lite files (version 10r) are available [here](https://disc.gsfc.nasa.gov/datasets/OCO2_L2_Lite_FP_10r/summary). The NetCDF files should be placed in the directory `data/input/OCO2_L2_Lite_FP.10r/`.
+- The SIF Lite files (version 10r) are available [here](https://disc.gsfc.nasa.gov/datasets/OCO2_L2_Lite_SIF_10r/summary). The NetCDF files should be placed in the directory `data/input/OCO2_L2_Lite_SIF.10r`.
+- The XCO2 Lite files (version 10r) are available [here](https://disc.gsfc.nasa.gov/datasets/OCO2_L2_Lite_FP_10r/summary). The NetCDF files should be placed in the directory `data/input/OCO2_L2_Lite_FP.10r`.
 
 ### Auxiliary datasets: MODIS LCC
 

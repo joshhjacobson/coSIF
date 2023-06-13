@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from scipy.linalg import cho_factor, cho_solve
+from scipy.stats import t
 
 
 def interval_score(df: pd.DataFrame, alpha: float = 0.05) -> pd.Series:
@@ -13,8 +14,8 @@ def interval_score(df: pd.DataFrame, alpha: float = 0.05) -> pd.Series:
 
 def dss(df: pd.DataFrame) -> pd.Series:
     """Dawid–Sebastiani score according to Gneiting and Katzfuss (2014)"""
-    sigma2 = df["mspe"]
-    sigma = np.sqrt(sigma2)
+    sigma = df["rmspe"]
+    sigma2 = sigma**2
     return (df["data"] - df["predictions"]) ** 2 / sigma2 + 2 * np.log(sigma)
 
 
@@ -43,6 +44,13 @@ def prepare_validation_results(
     df["Method"] = method.capitalize()
     df["Month"] = month
     df["Region"] = region
+
+    df["interval_lower"] = t.ppf(
+        alpha / 2, df.shape[0] - 1, loc=df["predictions"], scale=df["rmspe"]
+    )
+    df["interval_upper"] = t.ppf(
+        1 - alpha / 2, df.shape[0] - 1, loc=df["predictions"], scale=df["rmspe"]
+    )
 
     # compute individual prediction metrics
     df["INT"] = interval_score(df, alpha=alpha)

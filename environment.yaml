@@ -1,4 +1,4 @@
-name: geostat
+name: cosif
 channels:
   - conda-forge
 dependencies:

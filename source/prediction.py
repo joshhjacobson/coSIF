@@ -102,6 +102,11 @@ class Predictor:
             .to_xarray()
         )
 
+        # check validity flags
+        if not np.all(ds_predictions["validity_flag"].values):
+            count = np.sum(1 - ds_predictions["validity_flag"].values)
+            logging.warning(f"{count} predictions are not valid.")
+
         # reverse the standardization
         ds_predictions = self._postprocess_predictions(ds_predictions, ds_covariates)
 
@@ -178,6 +183,11 @@ class Predictor:
             .set_index(["lat", "lon"])
             .to_xarray()
         )
+
+        # check validity flags
+        if not np.all(ds_predictions["validity_flag"].values):
+            count = np.sum(1 - ds_predictions["validity_flag"].values)
+            logging.warning(f"{count} predictions are not valid.")
 
         # reverse the standardization
         ds_predictions = self._postprocess_predictions(ds_predictions, ds_covariates)

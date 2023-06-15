@@ -12,7 +12,7 @@ Supplementary datasets are available here: TODO
 
 ## Installation and setup
 
-Setup the `geostat` conda environment using the provide file `environment.yaml`:
+Setup the `cosif` conda environment using the provide file `environment.yaml`:
 ```
 conda env create -f environment.yaml
 ```

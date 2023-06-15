@@ -8,11 +8,13 @@ Unless stated otherwise, all commands are to be run in the root directory of the
 
 The resulting *coSIF* data products for Februray, April, July, and October 2021 are archived here: TODO
 
-Supplementary datasets are available here: TODO
+A supplementary dataset of all fitted model parameters is available here: TODO
+
+TODO: Add graphical abstract here.
 
 ## Installation and setup
 
-Setup the `cosif` conda environment using the provide file `environment.yaml`:
+Setup the `cosif` conda environment using the provided file `environment.yaml`:
 ```
 conda env create -f environment.yaml
 ```
@@ -37,11 +39,11 @@ mkdir 202102 202104 202107 202110
 
 ## Getting the data
 
-All input datasets go into the directory `data/input`. These includes both observational and auxiliary datasets.
+All input datasets go into the directory `data/input`. These include both observational and auxiliary datasets.
 
 ### Observational datasets: OCO-2 SIF and XCO2
 
-Both the SIF and XCO2 datasets are publicly available through NASA's Goddard Earth Sciences Data and Information Services Center (GES DISC).
+Both the SIF and XCO2 datasets are publicly available through NASA's GES DISC (Goddard Earth Sciences Data and Information Services Center).
 
 - The SIF Lite files (version 10r) are available [here](https://disc.gsfc.nasa.gov/datasets/OCO2_L2_Lite_SIF_10r/summary). The NetCDF files should be placed in the directory `data/input/OCO2_L2_Lite_SIF.10r`.
 - The XCO2 Lite files (version 10r) are available [here](https://disc.gsfc.nasa.gov/datasets/OCO2_L2_Lite_FP_10r/summary). The NetCDF files should be placed in the directory `data/input/OCO2_L2_Lite_FP.10r`.
@@ -54,7 +56,19 @@ The Terra and Aqua combined Moderate Resolution Imaging Spectroradiometer (MODIS
 
 There are four main steps in our multivariate spatial-statistical-prediction framework, corresponding to the four numbered directories. These are: 
 
-1. `01_data_preparation`:
-2. `02_modeling`:
-3. `03_prediction`:
-4. `04_validation`:
+1. `01_data_preparation`: Numbered files are to be run in order. Notebooks create the land-cover binary mask; collect and format all daily OCO-2 Lite files into a single NetCDF file for daily, spatially irregular SIF and a single NetCDF file for daily, spatially irregular XCO2; group SIF and XCO2 datasets by month and compute an average for each 0.05-degree CMG grid cell; an R script evaluates bisquare basis functions for all CMG grid cells; a final notebook combines gridded SIF, XCO2, and basis-function datasets into a single NetCDF file. 
+2. `02_modeling`: For each of February, April, July, and October 2021, notebooks compute empirical (cross-) semivariograms from the gridded SIF and XCO2 data, and fit modeled (cross-) semivariograms.
+3. `03_prediction`: Scripts for producing the coSIF data product in a specified month. For example, if using cokriging, run
+    ```
+    conda activate cosif
+    python 03_prediction/cokriging.py 202107
+    ```
+    or, if using kriging, run
+    ```
+    conda activate cosif
+    python 03_prediction/kriging.py 202102
+    ```
+    Note that these are long-running processes; it is advised that they be executed in a [screen session](https://linuxize.com/post/how-to-use-linux-screen/) to avoid issues with interruption.
+4. `04_validation`: For each of February, April, July, and October 2021, one notebook produces validation predictions for the Corn Belt validation block (b1) and one notebook produces validation predictions for the Cropland validation block (b2). Metrics and scores used to summarize the validation predictions are then collected in `collect_validation_results.ipynb`.
+
+NOTE: ensure that all notebooks are run using the `cosif` conda environment.

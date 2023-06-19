@@ -44,7 +44,7 @@ def prep_sif(ds: xr.Dataset) -> xr.Dataset:
     return xr.Dataset(
         {
             "sif": (["time"], ds.SIF_740nm.data),
-            "sif_var": (["time"], ds.SIF_Uncertainty_740nm.data**2),
+            "sif_var": (["time"], ds.SIF_Uncertainty_740nm.data),
         },
         coords={
             "lon": (["time"], ds.Longitude.data),
@@ -81,7 +81,7 @@ def prep_xco2(ds: xr.Dataset) -> xr.Dataset:
     return xr.Dataset(
         {
             "xco2": (["time"], ds.xco2.data),
-            "xco2_var": (["time"], ds.xco2_uncertainty.data**2),
+            "xco2_var": (["time"], ds.xco2_uncertainty.data),
         },
         coords={
             "lon": (["time"], ds.longitude.data),
@@ -137,6 +137,9 @@ def apply_gridded_average(
 ) -> xr.Dataset:
     """
     Aggregate irregular data to a regular grid of monthly averages within the specified extents.
+
+    NOTE: measurement error standard deviations are squared to obtain measurement error
+    variances before averaging.
     """
     kwargs = locals()
     ds = kwargs.pop("ds", None)
@@ -151,6 +154,11 @@ def apply_gridded_average(
     )
     # drop data outside domain extents to exclude from bin averages at edges
     df = df.loc[bounds].reset_index()
+
+    # square individual measurement error standard deviations to obtain measurement
+    # error variances
+    find_var_name = df.columns.str.endswith("_var")
+    df.loc[:, find_var_name] = df.loc[:, find_var_name] ** 2
 
     df_grid = regrid(df, **kwargs)
     if "index" in df_grid.columns:

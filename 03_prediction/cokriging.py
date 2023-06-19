@@ -19,7 +19,7 @@ with open(f"../data/intermediate/models/{YEARMONTH}/bivariate_model.pickle", "rb
     bivariate_matern = pickle.load(f)
 
 with xr.open_dataset(
-    "../data/intermediate/OCO2_005deg_monthly_north_america_with_basis.nc4"
+    "../data/intermediate/OCO2_005deg_months2021_north_america_with_basis.nc4"
 ) as ds:
     basis_vars = [x for x in list(ds.keys()) if x.startswith("B")]
     ds_covariates = ds[basis_vars].squeeze().drop_vars(["B1", "B10", "B20"])

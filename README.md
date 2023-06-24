@@ -14,7 +14,7 @@ TODO: Add graphical abstract here.
 
 ## Installation and setup
 
-Setup the `cosif` conda environment using the provided file `environment.yaml`:
+Setup the `cosif` conda environment using the provided file `environment.yaml` (this may take a few minutes):
 ```
 conda env create -f environment.yaml
 ```
@@ -61,7 +61,7 @@ In an initial exploratory data analysis (EDA) step, we create a bivariate time s
 There are four main steps in our multivariate spatial-statistical-prediction framework, corresponding to  four numbered directories. These are: 
 
 1. `01_data_preparation`: Numbered files are to be run in order. Notebooks create the land-cover binary mask; collect and format all daily OCO-2 Lite files into a single NetCDF file for daily, spatially irregular SIF and a single NetCDF file for daily, spatially irregular XCO2; group SIF and XCO2 datasets by month and compute an average for each 0.05-degree CMG grid cell; an R script evaluates bisquare basis functions for all CMG grid cells; a final notebook combines gridded SIF, XCO2, and basis-function datasets into a single NetCDF file. 
-2. `02_modeling`: For each of February, April, July, and October 2021, notebooks compute empirical (cross-) semivariograms from the gridded SIF and XCO2 data, and fit modeled (cross-) semivariograms.
+2. `02_modeling`: For each of February, April, July, and October 2021, notebooks compute empirical (cross-) semivariograms from the gridded SIF and XCO2 data (one month later), and fit modeled (cross-) semivariograms.
 3. `03_prediction`: Scripts for producing the coSIF data product in a specified month. For example, if using cokriging, run
     ```
     conda activate cosif

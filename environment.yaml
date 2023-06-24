@@ -11,7 +11,7 @@ dependencies:
   - pandas
   - scipy
   # Data management
-  - xarray
+  - xarray=2022.10.0
   - rioxarray
   - dask
   - netcdf4

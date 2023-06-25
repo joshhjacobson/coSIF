@@ -1,14 +1,16 @@
-# coSIF: Spatial statistical prediction of solar-induced chlorophyll ﬂuorescence (SIF) from multivariate OCO-2 data
+# coSIF: Spatial statistical prediction of solar-induced chlorophyll fluorescence (SIF) from multivariate OCO-2 data
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8078592.svg)](https://doi.org/10.5281/zenodo.8078592)
 
 This repository contains code to reproduce the results in the paper:
 
-> Jacobson, J., Cressie, N., Zammit-Mangion, A. (n.d.) Spatial statistical prediction of solar-induced chlorophyll ﬂuorescence (SIF) from multivariate OCO-2 data. Under review in *Remote Sensing*.
+> Jacobson, J., Cressie, N., Zammit-Mangion, A. (n.d.) Spatial statistical prediction of solar-induced chlorophyll fluorescence (SIF) from multivariate OCO-2 data. Under review in *Remote Sensing*.
 
 Unless stated otherwise, all commands are to be run in the root directory of the repository.
 
-The resulting *coSIF* data products for Februray, April, July, and October 2021 are archived here: TODO
+The resulting *coSIF* data product for February, April, July, and October 2021 are available here: https://doi.org/10.5281/zenodo.8078592
 
-A supplementary dataset of all fitted model parameters is available here: TODO
+A supplementary dataset of all fitted model parameters is available here: https://doi.org/10.5281/zenodo.8078560
 
 TODO: Add graphical abstract here.
 
@@ -39,7 +41,9 @@ mkdir 202102 202104 202107 202110
 
 ## Getting the data
 
-A compressed file containing the input datasets required for the analysis is archived here [TODO]. This file can be downloaded and extracted into the directory `data/input`. These input datasets include both observational and auxiliary datasets, which we obtained as described below.
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.8078476.svg)](https://doi.org/10.5281/zenodo.8078476)
+
+A compressed file containing the input datasets required for the analysis is archived [here](https://doi.org/10.5281/zenodo.8078476). This file can be downloaded and extracted into the directory `data/input`. These input datasets include both observational and auxiliary datasets, which we obtained as described below.
 
 ### Observational datasets: OCO-2 SIF and XCO2
 

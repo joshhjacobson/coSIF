@@ -105,8 +105,8 @@ def regrid(
     df = kwargs.pop("df", None)
 
     ds_grid = xe.util.cf_grid_2d(**kwargs)
-    lon_bounds = np.append(ds_grid.lon_bounds.values[0, :], ds_grid.lon_bounds.values[1, -1])
-    lat_bounds = np.append(ds_grid.lat_bounds.values[0, :], ds_grid.lat_bounds.values[1, -1])
+    lon_bounds = np.append(ds_grid.lon_bounds.values[:, 0], ds_grid.lon_bounds.values[-1, 1])
+    lat_bounds = np.append(ds_grid.lat_bounds.values[:, 0], ds_grid.lat_bounds.values[-1, 1])
 
     # overwrite lon-lat values with grid values
     df["lon"] = pd.cut(df["lon"], lon_bounds, labels=ds_grid["lon"].values).astype(np.float32)

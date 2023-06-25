@@ -479,8 +479,8 @@ class Predictor:
         num_local_values: int,
     ) -> np.ndarray:
         """
-        Compute the conditional covariance matrix described in Appendix 3 by applying
-        Equation (A.18) in parallel across all pairs of validation locations (a, b).
+        Compute the conditional covariance matrix described in Appendix A.3 by applying
+        Equation (A.19) in parallel across all pairs of validation locations (a, b).
         """
         logging.info("Running predictive covariance")
         da_covariance_weights = da_prediction_components[:, :, 1]
@@ -520,7 +520,7 @@ class Predictor:
         covariance_matrix[lower_indices] = covariance_matrix.T[lower_indices]
 
         # rescale the covariance matrix to match the scale of the data;
-        # Equation (A.15) of Appendix 3
+        # Equation (A.16) of Appendix A.3
         # NOTE: standardized measurement-error variance added in element-wise calculation
         covariance_matrix *= self.mf.fields[self._i].scale_factor ** 2
 
@@ -540,15 +540,15 @@ class Predictor:
         num_local_values: int = None,
     ) -> float:
         """
-        Compute the result in Equation (A.18) of Appendix 3, the conditional covariance
-        between locations s_a and s_b (on the standardized scale).
+        Compute the result in Equation (A.19) of Appendix A.3, the expected conditional
+        covariance between locations s_a and s_b (on the standardized scale).
         """
         a, b = ids
         if a == b and a % 100 == 0:
             # status update every hundredth diagonal element
             logging.info(f"Status: a = {a} ...")
 
-        # need the indices for a and b, for each process
+        # need the indices for values used at locations a and b, separated for each process
         indices_list = [
             [
                 da_data_indices[a, num_local_values * k : num_local_values * (k + 1)].values,
@@ -558,12 +558,13 @@ class Predictor:
         ]
 
         # build the covariance matrix for the combination of data locations used for a and b;
-        # see Equation (A.20) in Appendix 3
+        # see Equation (A.21) in Appendix A.3
         blocks = {}
         for i in range(self.n_procs):
             for j in range(self.n_procs):
                 if i <= j:
                     # collect array of coordinates used for each of a and b
+                    # NOTE: element 0 => a and element 1 => b
                     coord_list = [
                         self.mf.fields[i].coords[indices_list[i][0], :],
                         self.mf.fields[j].coords[indices_list[j][1], :],
@@ -571,14 +572,17 @@ class Predictor:
                     # compute the distances between the local data locations
                     h = distance_matrix(*coord_list)
                     if i == j:
+                        # NOTE: since i = j, the process is the same; need to add micro-scale
+                        # variation and measurement error variance when h = 0
                         blocks[f"{i}{j}"] = self.model.covariance(i, h, use_nugget=True)
-                        # NOTE: since i = j, the process is the same; along the diagonal of
-                        # h, the location is also the same (i.e., a = b)
 
-                        # add spatially varying measurement error variance to diagonal
-                        blocks[f"{i}{j}"] += np.diag(
-                            self.mf.fields[i].variance_estimates[indices_list[i][0]]
-                        )
+                        # add spatially varying measurement error variance:
+                        # if h = 0, then s_l = s_k; same field and same locations means that
+                        # variances estimates can be collected from a (0) or b (1) equivalently
+                        same_locations_idx = np.where(h == 0)
+                        blocks[f"{i}{j}"][h == 0] += self.mf.fields[i].variance_estimates[
+                            indices_list[i][0]
+                        ][same_locations_idx[0]]
                     else:
                         blocks[f"{i}{j}"] = self.model.cross_covariance(i, j, h)
                 else:
@@ -589,9 +593,9 @@ class Predictor:
             [[blocks[f"{i}{j}"] for j in range(self.n_procs)] for i in range(self.n_procs)]
         )
 
-        # compute the local covariance vectors; Equation (A.19) in Appendix 3
+        # compute the local covariance vectors; Equation (A.20) in Appendix A.3
         covariance_vectors = []
-        for l, k in zip((a, b), (1, 0)):
+        for l, k in ((a, 1), (b, 0)):
             local_distances = [
                 distance_matrix(
                     self._pcoords.iloc[l, :].values, field.coords[indices_list[i][k]]
@@ -614,7 +618,7 @@ class Predictor:
             )
             c0 = self.model.covariance(self._i, distance, use_nugget=False)[0]
 
-        # calculation in last line of Equation (A.18)
+        # calculation in last line of Equation (A.19)
         return (
             c0
             - np.dot(da_covariance_weights[a, :].values, covariance_vectors[1])

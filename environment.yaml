@@ -6,22 +6,23 @@ dependencies:
   - python=3.9
   - black
   - jupyterlab
-  - numpy
-  - numba
-  - pandas
-  - scipy
+  - numpy=1.23.4
+  - numba=0.56.3
+  - pandas=1.5.0
+  - scipy=1.9.1
   # Data management
   - xarray=2022.10.0
   - rioxarray
-  - dask
+  - dask=2022.10.0
   - netcdf4
   - h5netcdf
   - h5py
   - rasterio
-  - xesmf
+  - esmf=8.2.0
+  - xesmf=0.6.3
   # Statistics / ML
-  - scikit-learn
-  - statsmodels
+  - scikit-learn=1.1.2
+  - statsmodels=0.13.2
   # Plotting
   - matplotlib=3.4
   - seaborn

@@ -1,5 +1,19 @@
-# Produce cokriging predictions at all land-based 0.05-degree grid cells in North American
-# domain for the specified month
+"""
+Produce cokriging predictions at all land-based 0.05-degree grid cells in the North American
+domain for a specified month.
+
+This script should be run from the command line as in the following example:
+```
+conda activate cosif
+cd 03_prediction
+python cokriging.py 202107
+```
+where the string `202107` indicates that predictions and prediction standard errors 
+will be produced for July 2021.
+
+NOTE: This is a long-running processes that can take several hours to one day of compute 
+time on a 64-core server.
+"""
 
 import sys
 

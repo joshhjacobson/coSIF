@@ -3,8 +3,8 @@ import sys
 sys.path.insert(0, "../source")
 
 YEARMONTH = str(sys.argv[1])
-N_WORKERS = int(sys.argv[2])
-NUM_LOCAL_VALUES = 150
+BLOCK_NAME = str(sys.argv[2])
+N_WORKERS = int(sys.argv[3])
 
 from copy import deepcopy
 import logging
@@ -13,7 +13,6 @@ import numpy as np
 import pandas as pd
 import xarray as xr
 import statsmodels.api as sm
-import dask
 from dask.distributed import Client
 
 import prediction
@@ -21,15 +20,12 @@ import validation
 
 
 logging.basicConfig(
-    filename=f"validation_b1_{YEARMONTH}.log",
-    format="%(levelname)s | %(name)s:%(funcName)s:%(lineno)d | %(message)s",
-    level=logging.INFO,
+    format="%(levelname)s | %(name)s:%(funcName)s:%(lineno)d | %(message)s", level=logging.INFO
 )
-dask.config.set({"logging.distributed": "error"})
 
 if __name__ == "__main__":
 
-    client = Client(n_workers=N_WORKERS)
+    client = Client(n_workers=N_WORKERS, silence_logs=50)  # only show actual dask errors
 
     ## Global arguments
     NUM_LOCAL_VALUES = 150  # number of nearest observations used in point predictions
@@ -49,13 +45,27 @@ if __name__ == "__main__":
         ds_sif = ds[["sif", "sif_var"] + basis_vars].sel(time=f"{YEAR}-{MONTH}").squeeze()
 
     ## Setup validation block
-    BLOCK_NAME = "b1"
-    block_conditions = (
-        (ds_sif["lon"] > -95)
-        & (ds_sif["lon"] < -90)
-        & (ds_sif["lat"] > 40)
-        & (ds_sif["lat"] < 45)
-    )
+    blocks = {
+        "b1": (
+            (ds_sif["lon"] > -95)
+            & (ds_sif["lon"] < -90)
+            & (ds_sif["lat"] > 40)
+            & (ds_sif["lat"] < 45)
+        ),
+        "b2": (
+            (ds_sif["lon"] > -104)
+            & (ds_sif["lon"] < -99)
+            & (ds_sif["lat"] > 36.5)
+            & (ds_sif["lat"] < 41.5)
+        ),
+    }
+    if BLOCK_NAME not in blocks.keys():
+        raise ValueError(
+            f"{BLOCK_NAME} is not a valid block name; use either 'b1' (Corn Belt) or "
+            "'b2' (Cropland).",
+        )
+    block_conditions = blocks[BLOCK_NAME]
+
     df_test = (
         ds_sif.where(block_conditions)
         .to_dataframe()

@@ -77,6 +77,12 @@ There are four main steps in our multivariate spatial-statistical-prediction fra
     python kriging.py 202110
     ```
     Note that these are long-running processes that can take several hours to one day of compute time on a 64-core server. It is advised that they be executed in a [screen session](https://linuxize.com/post/how-to-use-linux-screen/) to avoid issues with interruption. Once the predictions and prediction standard errors have been produced for each month, the coSIF data product is collected and formatted in `collect_coSIF_datasets.ipynb`.
-4. `04_validation`: For each of February, April, July, and October 2021, one notebook produces validation predictions for the Corn Belt validation block (b1) and one notebook produces validation predictions for the Cropland validation block (b2). Each notebook can take around 30 minutes to run on a 64-core server. Metrics used to summarize the validation predictions are then collected in `collect_validation_results.ipynb`.
+4. `04_validation`: For each of February, April, July, and October 2021, the validation predictions for the Corn Belt validation block (b1) and the Cropland validation block (b2) are produced by running `run_validation.py`. The script takes three arguments from the command line: 1) validation year-month; 2) block name; 3) number of cores for parallelization. For example, the script can be run for July 2021 in the Corn Belt validation block (b1) using 64 cores as follows:
+    ```
+    conda activate cosif
+    cd 04_validation
+    python run_validation.py 202107 b1 64
+    ``` 
+    The script can take around 30 minutes to run on a 64-core server. After running the script for both blocks in all four months, metrics used to summarize the validation predictions are collected in `collect_validation_results.ipynb`.
 
 NOTE: ensure that all notebooks are run using the `cosif` conda environment.

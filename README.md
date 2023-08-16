@@ -12,7 +12,9 @@ The resulting coSIF data product for February, April, July, and October 2021 is 
 
 A supplementary dataset of all fitted model parameters is available at: https://doi.org/10.5281/zenodo.8078560
 
-<img align="center" src="https://github.com/joshhjacobson/coSIF/blob/main/cosif_202107.png" alt="drawing" width="75%"/>
+<p align="center">
+  <img src="https://github.com/joshhjacobson/coSIF/blob/main/cosif_202107.png" alt="drawing" width="75%"/>
+</p>
 
 ## Installation and setup
 

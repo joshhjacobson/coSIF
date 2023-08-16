@@ -4,13 +4,16 @@
 
 This repository contains code to reproduce the results in the paper:
 
-> Jacobson, J., Cressie, N., Zammit-Mangion, A. (n.d.) Spatial statistical prediction of solar-induced chlorophyll fluorescence (SIF) from multivariate OCO-2 data. Submitted to *Remote Sensing*.
+> Jacobson, J., Cressie, N., & Zammit-Mangion, A. (2023). Spatial statistical prediction of solar-induced chlorophyll fluorescence (SIF) from multivariate OCO-2 data. *Remote Sensing*, 15(16), 4038. https://doi.org/10.3390/rs15164038
 
 Unless stated otherwise, all commands are to be run in the root directory of the repository.
 
-The resulting *coSIF* data product for February, April, July, and October 2021 is available at: https://doi.org/10.5281/zenodo.8078592
+The resulting coSIF data product for February, April, July, and October 2021 is available at: https://doi.org/10.5281/zenodo.8078592
 
 A supplementary dataset of all fitted model parameters is available at: https://doi.org/10.5281/zenodo.8078560
+
+<!-- <img align="center" src="https://github.com/joshhjacobson/coSIF/blob/main/cosif_202107.pdf" alt="drawing" width="50%"/> -->
+![alt text](https://github.com/joshhjacobson/coSIF/blob/main/cosif_202107.pdf?raw=true)
 
 ## Installation and setup
 

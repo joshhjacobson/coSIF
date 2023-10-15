@@ -10,14 +10,14 @@ metrics <- read_csv("data/output/validation_metrics.csv") %>%
     select(-c(N, BIAS)) %>% 
     pivot_longer(c(RASPE, INT, DSS, MDSS), names_to = "Metric", values_to = "Value")
 
-# Make plots for each metric
+# Plot metrics as bars with facets on region and metric
 metrics_plot <- metrics %>% 
     ggplot(aes(x = Value, y = Month, fill = Method)) +
     geom_col(position = position_dodge2(reverse = TRUE, padding = 0)) +
     facet_grid(vars(Region), vars(fct_relevel(Metric, "RASPE", "INT", "DSS", "MDSS")),
         scales = "free_x"
     ) +
-    scale_fill_manual(values = c("#238b45", "#bae4b3")) +
+    scale_fill_manual(values = c("#5954d6", "#c0affb")) +
     scale_y_discrete(
         labels = c("202102" = "Feb", "202104" = "Apr", "202107" = "Jul", "202110" = "Oct")
     ) +

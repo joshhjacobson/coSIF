@@ -79,9 +79,13 @@ def collect_metrics(df: pd.DataFrame, num_decimal: int = 2) -> pd.DataFrame:
     groups = ["Method", "Month", "Region"]
     df_metrics = df.groupby(groups).agg(
         N=("difference", "count"),
-        BIAS=("difference", lambda x: np.round_(np.mean(x), num_decimal)),
-        RASPE=("difference", lambda x: np.round_(np.sqrt(np.mean(x**2)), num_decimal)),
-        DSS_MEAN=("DSS", lambda x: np.round_(np.mean(x), num_decimal)),
-        INT_MEAN=("INT", lambda x: np.round_(np.mean(x), num_decimal)),
+        # BIAS=("difference", lambda x: np.round_(np.mean(x), num_decimal)),
+        # RASPE=("difference", lambda x: np.round_(np.sqrt(np.mean(x**2)), num_decimal)),
+        # DSS_MEAN=("DSS", lambda x: np.round_(np.mean(x), num_decimal)),
+        # INT_MEAN=("INT", lambda x: np.round_(np.mean(x), num_decimal)),
+        BIAS=("difference", lambda x: np.mean(x)),
+        RASPE=("difference", lambda x: np.sqrt(np.mean(x**2))),
+        DSS_MEAN=("DSS", lambda x: np.mean(x)),
+        INT_MEAN=("INT", lambda x: np.mean(x)),
     )
     return df_metrics
